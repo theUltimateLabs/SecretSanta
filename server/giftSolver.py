@@ -1,7 +1,11 @@
 from constraint import *
 import random,unittest,time
 
-
+# Uses a constraint satisfaction solver to find a secret santa solution
+# maxDelay will limit how much time is spent finding possible solutions
+# historyYears is how many years to take into account from the history array
+# restrcitWithinFmaily restricts gifting to only people outside a participants immediate family
+# returns a single solution or None if no solution is found
 def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWithinFamily=False):
     #Two small to get a solution
     
@@ -55,7 +59,7 @@ def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWith
 
 class Tester(unittest.TestCase):
 
-
+    #check if a solution is valid
     def checkSolution(self,families,solution,history=[],historyYears=0,restrictWithinFamily=False):
         if (solution == None):
             return
