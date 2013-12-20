@@ -2,6 +2,7 @@ package com.theultimatelabs.secretsanta;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -63,7 +64,8 @@ public class URLFetch extends AsyncTask<String, Void, String> {
 		     	if (contentLength < 0) contentLength = 4096  ;
 		     			
 		     	byte[] contentBytes = new byte[contentLength];
-		     	int realLength = Math.max(contentStream.read(contentBytes),contentLength);
+		     	
+		     	int realLength = Math.min(contentStream.read(contentBytes),contentLength);
 		     	
 		     	String contentString = new String(Arrays.copyOfRange(contentBytes,0,realLength),"UTF-8");
 		     	Log.v(TAG,contentString);

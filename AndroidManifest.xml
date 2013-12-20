@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.theultimatelabs.secretsanta"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.0.1" >
     
     <uses-permission android:name="android.permission.INTERNET" /> 
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
@@ -24,7 +24,8 @@
             
         </activity>
         <activity
-            android:name=".LoginActivity" >
+            android:name=".LoginActivity" 
+            android:configChanges="orientation|screenSize|keyboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +33,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ConstraintsActivity" >
+            android:name=".ConstraintsActivity"
+            android:configChanges="orientation|screenSize|keyboard" >
         </activity>
-        <activity
-            android:name=".OldListActivity" >
-        </activity>
+        
         
     </application>
 

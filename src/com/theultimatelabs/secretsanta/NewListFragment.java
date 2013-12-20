@@ -72,16 +72,7 @@ public class NewListFragment extends Fragment {
 		
 		setHasOptionsMenu(true);
 		
-		Participent bob = new Participent("RobB", "robcb85@gmail.com");
-		bob.familyMembers.add(new Participent("Mary"));
-		//bob.familyMembers.add(new Participent("Jude"));
-		Globals.newListFamiles.add(bob);
-
-		Participent sara = new Participent("rob", "rob@theultimatelabs.com");
-		sara.familyMembers.add(new Participent("Mike",
-				"rob+mike@theultimatelabs.com"));
-		//sara.familyMembers.add(new Participent("Luke"));
-		Globals.newListFamiles.add(sara);
+		
 
 		mNewListAdapter = new NewListAdapter(Globals.newListFamiles, getActivity());
 		// setContentView(R.layout.new_list);
@@ -92,7 +83,7 @@ public class NewListFragment extends Fragment {
 	    View view = inflater.inflate(R.layout.list, container, false);
 	    
 	    ExpandableListView newListView = (ExpandableListView) view.findViewById(R.id.newList);
-		
+	   
 		newListView.setAdapter(mNewListAdapter);
 		
 		newListView.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -286,6 +277,9 @@ public class NewListFragment extends Fragment {
 										contact.name)).show();
 			} else {
 				if (requestCode == Constants.PICK_FAMILY) {
+
+					Log.d("NAME",contact.emails[0]);
+					Log.d("NAME",contact.name);
 					mNewListAdapter.addFamily(contact.name, contact.emails[0]);
 				} else {
 					mNewListAdapter.addFamilyMember(requestCode
