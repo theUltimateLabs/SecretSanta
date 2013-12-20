@@ -58,4 +58,12 @@
         android:layout_below="@+id/loginButton"
         android:text="Create" />
 
+    <Button
+        android:id="@+id/demoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/listnameText"
+        android:layout_alignRight="@+id/listnameText"
+        android:layout_below="@+id/createButton"
+        android:text="Demo" />
 </RelativeLayout>

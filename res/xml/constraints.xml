@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="restrict_within_families"
+        android:title="Restrict Within Families"
+        android:summary="Prevent people within the same family from giving to each other"
+        android:defaultValue="true" />
+	<CheckBoxPreference
+        android:key="no_cycle"
+        android:title="No Gifting Loops"
+        android:summary="Prevent people giving to the same person that is giving to them"
+        android:defaultValue="true" />
+    <EditTextPreference
+        android:key="history_range"
+        android:title="History Range"
+        android:summary="How many years back to check to avoid gifiting to the same person again"
+        android:defaultValue="2" />
+</PreferenceScreen>

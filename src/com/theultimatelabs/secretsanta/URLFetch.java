@@ -37,6 +37,8 @@ public class URLFetch extends AsyncTask<String, Void, String> {
     	 StringEntity data = null;
     	 if (args.length >= 2) {
     		 try {
+		    	 //Log.i(TAG,"Contents:"+data.toString());
+    			Log.i(TAG,"Contents"+args[1]);
 				data = new StringEntity(args[1]);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
@@ -54,16 +56,24 @@ public class URLFetch extends AsyncTask<String, Void, String> {
 		    	 request = new HttpPut(new URI(url));
 		    	 ((HttpPut)request).setEntity(data);
 		     }
+	    	 Log.i(TAG,"Sending request to "+url);
 	     	HttpResponse response = client.execute(request);
-	     	InputStream contentStream = response.getEntity().getContent();
-	     	int contentLength = (int) response.getEntity().getContentLength();
-	     	byte[] contentBytes = new byte[contentLength];
-	     	if( contentLength != contentStream.read(contentBytes)) {
-	     		//TODO: error handling 
+	     	if (response.getStatusLine().getStatusCode() == 200) {
+		     	InputStream contentStream = response.getEntity().getContent();
+		     	int contentLength = (int) response.getEntity().getContentLength();
+		     	byte[] contentBytes = new byte[contentLength];
+		     	if( contentLength != contentStream.read(contentBytes)) {
+		     		//TODO: error handling 
+		     	}
+		     	String contentString = new String(contentBytes,"UTF-8");
+		     	Log.v(TAG,contentString);
+		     	return contentString;
 	     	}
-	     	String contentString = new String(contentBytes,"UTF-8");
-	     	Log.v(TAG,contentString);
-	     	return contentString;
+	     	else {
+	     		Log.e(TAG,response.getStatusLine().toString());
+	     		Log.e(TAG,response.getStatusLine().getReasonPhrase());
+	     	}
+	     	return null;
 	    } catch (URISyntaxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -84,6 +94,6 @@ public class URLFetch extends AsyncTask<String, Void, String> {
      }
 
      protected void onPostExecute(String result) {
-    	 
+    	 Log.i(TAG,"RESULT:"+result);
      }
 }

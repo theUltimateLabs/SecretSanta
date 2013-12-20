@@ -7,6 +7,12 @@
         android:title="Add Entry"/>
     
     <item
+        android:id="@+id/constraints"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Constraints"/>
+    
+    <item
         android:id="@+id/about"
         android:orderInCategory="100"
         android:showAsAction="never"

@@ -1,12 +1,26 @@
 from constraint import *
 import random,unittest,time
 
+#Custom constraint that prevents cycles
+#i.e. a gifter cannot be the giftee of the same person
+class NoCycles(Constraint):
+    
+    def __init__(self):
+        pass
+    
+    def __call__(self, variables, domains, assignments, forwardcheck=False):
+        for x,y in assignments.items():
+            if y in assignments and x == assignments[y]:
+                return False
+        return True
+
+
 # Uses a constraint satisfaction solver to find a secret santa solution
 # maxDelay will limit how much time is spent finding possible solutions
-# historyYears is how many years to take into account from the history array
+# historyRange is how many years to take into account from the history array
 # restrcitWithinFmaily restricts gifting to only people outside a participants immediate family
 # returns a single solution or None if no solution is found
-def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWithinFamily=False):
+def findGiftSolution(families,history=[],maxDelay=1.0,historyRange=0,restrictWithinFamily=False,noCycles=False):
     #Two small to get a solution
     
     problem = Problem()
@@ -24,8 +38,8 @@ def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWith
             #search through history and extract all history of a gifter
             gifterHistory = set()
             for pastSolution in history:
-                if historyYears <= 0: break
-                historyYears -= 1
+                if historyRange <= 0: break
+                historyRange -= 1
                 if gifter in pastSolution:
                     gifterHistory.add(pastSolution[gifter])
             
@@ -39,7 +53,8 @@ def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWith
             problem.addVariable(gifter,list(domain))
             
     problem.addConstraint(AllDifferentConstraint()) #Can't have two people giving to the same person
-
+    if noCycles:
+        problem.addConstraint(NoCycles())
     
     #for some cases it will take a very long time to generate all the solutions,
     #so this generates as many as possible in a given amount of time and then
@@ -60,7 +75,7 @@ def GetGiftSolution(families,history=[],maxDelay=1.0,historyYears=0,restrictWith
 class Tester(unittest.TestCase):
 
     #check if a solution is valid
-    def checkSolution(self,families,solution,history=[],historyYears=0,restrictWithinFamily=False):
+    def checkSolution(self,families,solution,history=[],historyRange=0,restrictWithinFamily=False):
         if (solution == None):
             return
         
@@ -80,8 +95,8 @@ class Tester(unittest.TestCase):
                 giftee = solution[gifter] 
                 #make sure no repeats with history range
                 for pastSolution in history:
-                    if historyYears <= 0: break
-                    historyYears -= 1
+                    if historyRange <= 0: break
+                    historyRange -= 1
                     if gifter in pastSolution:
                         self.assertNotEqual(giftee, pastSolution[gifter])
                 self.assertIn(giftee,extFamily)
@@ -105,10 +120,10 @@ class Tester(unittest.TestCase):
         for families in familiess:
             history = []
             for year in range(4):
-                solution = GetGiftSolution(families,history,historyYears=3,restrictWithinFamily=True)
+                solution = findGiftSolution(families,history,historyRange=3,restrictWithinFamily=True)
                 if not solution: break
                 print solution
-                self.checkSolution(families,solution,history,historyYears=3,restrictWithinFamily=True)
+                self.checkSolution(families,solution,history,historyRange=3,restrictWithinFamily=True)
                 history.append(solution)
                 
                 
@@ -118,17 +133,17 @@ class Tester(unittest.TestCase):
         for family in families:
             history = []
             for year in range(4):
-                solution = GetGiftSolution([family],history,historyYears=3)
+                solution = findGiftSolution([family],history,historyRange=3)
                 if not solution: break
                 print solution
-                self.checkSolution([family],solution,history,historyYears=3)
+                self.checkSolution([family],solution,history,historyRange=3)
                 history.append(solution)
                 
     def test_problem1(self):
         print 'Testing problem1'
         families = map(set,["","A","AB","ABC","ABCD","ABCDEFGHIJKLMNOPQRSTUVWXYZ"])
         for family in families:
-            solution = GetGiftSolution([family])
+            solution = findGiftSolution([family])
             print solution
             self.checkSolution([family],solution)
                 
