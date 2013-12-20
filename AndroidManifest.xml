@@ -15,12 +15,12 @@
         android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="TS Santa"
+        android:label="Top Secret Santa"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboard"
-            android:label="TS Santa" >
+            android:label="Top Secret Santa" >
             
         </activity>
         <activity

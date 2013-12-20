@@ -1,7 +1,11 @@
 package com.theultimatelabs.secretsanta;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -168,7 +172,33 @@ public class NewListFragment extends Fragment {
 
 						Log.v("QUERY", qparams);
 						new URLFetch(Constants.HOST) { 
-							
+							protected void onPostExecute(String result) {
+								if (result!=null) {
+									Log.i("RESULT",result);
+									Toast.makeText(getActivity(), "A solution has been found! Assignments are being mailed by our elfs right now!", Toast.LENGTH_LONG).show();
+									
+									JSONObject solution;
+									try {
+										solution = new JSONObject(result);
+										Iterator<String> gifterIter = solution.keys();
+										if (gifterIter.hasNext()) {
+											Map<String, String> history =  new HashMap<String,String>();
+											while(gifterIter.hasNext()) {
+												String gifter = gifterIter.next();
+												String giftee = solution.getString(gifter);
+												history.put(gifter, giftee);
+											}
+											Globals.histories.put((Calendar.getInstance().get(Calendar.YEAR) ),history);
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+								}
+								else {
+									Toast.makeText(getActivity(), "An error occured or no solution was found! Loosen the constraints and try again.", Toast.LENGTH_LONG).show();
+								}
+							}
 						}.execute("/submit" + qparams, mNewListAdapter.getJson().toString());
 					}
 				});

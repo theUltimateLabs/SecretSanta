@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,8 +15,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -61,11 +60,12 @@ public class URLFetch extends AsyncTask<String, Void, String> {
 	     	if (response.getStatusLine().getStatusCode() == 200) {
 		     	InputStream contentStream = response.getEntity().getContent();
 		     	int contentLength = (int) response.getEntity().getContentLength();
+		     	if (contentLength < 0) contentLength = 4096  ;
+		     			
 		     	byte[] contentBytes = new byte[contentLength];
-		     	if( contentLength != contentStream.read(contentBytes)) {
-		     		//TODO: error handling 
-		     	}
-		     	String contentString = new String(contentBytes,"UTF-8");
+		     	int realLength = Math.max(contentStream.read(contentBytes),contentLength);
+		     	
+		     	String contentString = new String(Arrays.copyOfRange(contentBytes,0,realLength),"UTF-8");
 		     	Log.v(TAG,contentString);
 		     	return contentString;
 	     	}

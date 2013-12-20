@@ -65,5 +65,6 @@
         android:layout_alignLeft="@+id/listnameText"
         android:layout_alignRight="@+id/listnameText"
         android:layout_below="@+id/createButton"
+        android:visibility="gone"
         android:text="Demo" />
 </RelativeLayout>

@@ -117,10 +117,10 @@ public class OldListFragment extends Fragment {
 		new URLFetch(Constants.HOST) {
 			protected void onPostExecute(String result) {
 				if (result!=null) {
-					Toast.makeText(getActivity(), "New history updated on server", Toast.LENGTH_LONG);
+					Toast.makeText(getActivity(), "New history updated on server", Toast.LENGTH_LONG).show();
 				}
 				else {
-					Toast.makeText(getActivity(), "Error updating history on server", Toast.LENGTH_LONG);
+					Toast.makeText(getActivity(), "Error updating history on server", Toast.LENGTH_LONG).show();
 				}
 		     }
 		}.execute(url,json.toString());
